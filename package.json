@@ -1,7 +1,7 @@
 {
   "name": "lueinfo-backend-proxy",
   "version": "1.0.0",
-  "description": "Secure Proxy Server for Web3Forms submissions",
+  "description": "Secure Proxy Server for Resend Email submissions",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {

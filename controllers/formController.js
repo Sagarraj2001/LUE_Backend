@@ -18,7 +18,7 @@ const sendEmailViaResend = async (subject, htmlContent, clientEmail, res) => {
     });
   }
 
-  console.log(`[Proxy] Forwarding submission via Resend to: ${notificationEmail}`);
+  console.log(`[Proxy] Forwarding submission via Resend. From: ${fromEmail} -> To: ${notificationEmail}`);
 
   try {
     const response = await axios.post(
@@ -58,9 +58,17 @@ const sendEmailViaResend = async (subject, htmlContent, clientEmail, res) => {
     
     if (error.response) {
       console.error('[Proxy Error] Resend Error Payload:', error.response.data);
+      
+      let customMessage = 'Resend API returned an error.';
+      if (error.response.status === 403) {
+        customMessage = 'Resend Authentication/Permission Error. 1) Verify your RESEND_API_KEY is correct. 2) If using FROM_EMAIL=onboarding@resend.dev, you can ONLY send emails to the email address that registered the Resend account. 3) If sending to info@lueinfo.com, you must verify the domain "lueinfo.com" in Resend and set FROM_EMAIL to a verified address (e.g. no-reply@lueinfo.com).';
+      } else if (error.response.status === 422) {
+        customMessage = 'Resend Validation Error. Ensure that the sender domain matches your verified Resend domain.';
+      }
+      
       return res.status(error.response.status).json({
         success: false,
-        message: 'Resend API returned an error.',
+        message: customMessage,
         error: error.response.data
       });
     }

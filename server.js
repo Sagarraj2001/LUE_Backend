@@ -30,13 +30,13 @@ app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps, curl, postman, etc.)
     if (!origin) return callback(null, true);
-    
+
     // Check if origin is allowed
-    const isAllowed = allowedOrigins.includes(origin) || 
-                      origin.endsWith('.lueinfo.com') ||
-                      origin.startsWith('http://localhost:') ||
-                      origin.startsWith('http://127.0.0.1:');
-                      
+    const isAllowed = allowedOrigins.includes(origin) ||
+      origin.endsWith('.lueinfo.com') ||
+      origin.startsWith('http://localhost:') ||
+      origin.startsWith('http://127.0.0.1:');
+
     if (isAllowed) {
       callback(null, true);
     } else {
