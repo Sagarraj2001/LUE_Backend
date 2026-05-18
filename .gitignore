@@ -1,0 +1,15 @@
+# Dependency directories
+node_modules/
+
+# Local environment variables containing sensitive keys
+.env
+.env.local
+.env.production
+
+# Vercel deployment metadata
+.vercel
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
