@@ -9,7 +9,7 @@ const submitWithAxios = async (fullPayload) => {
       'Accept': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
     },
-    timeout: 10000 // 10 seconds timeout
+    timeout: 10000
   });
   return response.data;
 };
@@ -73,7 +73,7 @@ const submitToWeb3Forms = async (payload, res) => {
 
   try {
     const result = await submitWithAxios(fullPayload);
-    
+
     if (result && result.success) {
       console.log(`[Proxy] Axios submission successful for ${payload.email}`);
       return res.status(200).json(result);
@@ -83,7 +83,7 @@ const submitToWeb3Forms = async (payload, res) => {
     }
   } catch (axiosError) {
     console.error(`[Proxy] Axios attempt failed: ${axiosError.message}. Trying Curl fallback...`);
-    
+
     try {
       const result = await submitWithCurl(fullPayload);
       if (result && result.success) {
@@ -95,7 +95,7 @@ const submitToWeb3Forms = async (payload, res) => {
       }
     } catch (curlError) {
       console.error(`[Proxy Error] Curl fallback also failed: ${curlError.message}`);
-      
+
       const errorMsg = axiosError.message || curlError.message || '';
       if (errorMsg.includes('403') || errorMsg.includes('cloudflare') || errorMsg.includes('Just a moment')) {
         return res.status(403).json({
@@ -103,7 +103,7 @@ const submitToWeb3Forms = async (payload, res) => {
           message: 'Forbidden: Request was blocked by Web3Forms bot protection. Please contact support.'
         });
       }
-      
+
       return res.status(502).json({
         success: false,
         message: 'Bad Gateway: Both Axios and Curl proxy attempts to Web3Forms failed.',
